@@ -108,3 +108,17 @@ SELECT SUM(stock_quantity) FROM books;
 SELECT author_fname, author_lname, AVG(released_year) FROM books GROUP BY author_fname, author_lname;
 SELECT CONCAT(author_fname, ' ', author_lname) FROM books WHERE pages = (SELECT MAX(pages) FROM books);
 SELECT released_year AS year, COUNT(*) AS '# books', AVG(pages) AS 'avg pages' FROM books GROUP BY released_year;
+
+/* DATA TYPES EXERCISES */
+SELECT CURTIME();
+SELECT CURDATE();
+SELECT DAYOFWEEK(CURDATE());
+SELECT DATE_FORMAT(CURDATE(), '%W');
+SELECT DATE_FORMAT(CURDATE(), '%m/%d/%Y');
+SELECT DATE_FORMAT(NOW(), '%M %D at %H:%i');
+CREATE TABLE tweets (
+  tweet_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  content VARCHAR(255),
+  username VARCHAR(255),
+  created_at TIMESTAMP DEFAULT NOW()
+);
