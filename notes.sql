@@ -13,3 +13,18 @@ SELECT title, stock_quantity,
     ELSE '***'
   END AS STOCK
 FROM books;
+
+-- Syntax to create table with foreign key
+CREATE TABLE customers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  first_name VARCHAR(100),
+  last_name VARCHAR(100),
+  email VARCHAR(255)
+);
+CREATE TABLE orders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  order_date DATE,
+  amount DECIMAL(8,2),
+  customer_id INT,                                    --holds customer data
+  FOREIGN KEY(customer_id) REFERENCES customers(id)   --assigns customer_id as references of id in customers table
+);
