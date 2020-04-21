@@ -25,10 +25,12 @@ CREATE TABLE customers (
   last_name VARCHAR(100),
   email VARCHAR(255)
 );
+
 CREATE TABLE orders (
   id INT AUTO_INCREMENT PRIMARY KEY,
   order_date DATE,
   amount DECIMAL(8,2),
   customer_id INT,                                    --holds customer data
   FOREIGN KEY(customer_id) REFERENCES customers(id)   --assigns customer_id as references of id in customers table
+  ON DELETE CASCADE                                   --deletes record when the foreign record deleted
 );
