@@ -142,3 +142,52 @@ SELECT title, author_lname,
     ELSE '1 book'
   END AS 'COUNT'
 FROM books GROUP BY author_fname, author_lname ORDER BY author_lname;
+
+/* FIRST JOINS EXERCISE */
+DROP DATABASE IF EXISTS student_papers;
+CREATE DATABASE student_papers;
+USE student_papers;
+
+CREATE TABLE students (
+  id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  first_name VARCHAR(255)
+);
+
+CREATE TABLE papers (
+  id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  title VARCHAR(255),
+  grade INT,
+  student_id INT,
+  FOREIGN KEY(student_id) REFERENCES students(id)
+  ON DELETE CASCADE
+);
+
+SELECT first_name, title, grade FROM students INNER JOIN papers
+ON students.id = papers.student_id ORDER BY grade DESC;
+
+SELECT first_name, title, grade FROM students LEFT JOIN papers
+ON students.id = papers.student_id;
+
+SELECT
+  first_name,
+  IFNULL(title, 'MISSING') AS title,
+  IFNULL(grade, 0) AS grade
+FROM students LEFT JOIN papers ON students.id = papers.student_id;
+
+SELECT
+  first_name,
+  IFNULL(AVG(grade), 0) AS average
+FROM students LEFT JOIN papers ON students.id = papers.student_id
+GROUP BY students.id
+ORDER BY average DESC;
+
+SELECT
+  first_name,
+  IFNULL(AVG(grade), 0) AS average,
+  CASE
+    WHEN IFNULL(AVG(grade), 0) >= 75 THEN 'PASSING'
+    ELSE 'FAILING'
+  END AS passing_status
+FROM students LEFT JOIN papers ON students.id = papers.student_id
+GROUP BY students.id
+ORDER BY average DESC;
