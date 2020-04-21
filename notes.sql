@@ -14,6 +14,10 @@ SELECT title, stock_quantity,
   END AS STOCK
 FROM books;
 
+-- Where clause with IN and NOT IN
+SELECT title, released_year FROM books WHERE released_year IN (2001, 2002, 2005);
+SELECT title, released_year FROM books WHERE released_year NOT IN (2001, 2002, 2005);
+
 -- Syntax to create table with foreign key
 CREATE TABLE customers (
   id INT AUTO_INCREMENT PRIMARY KEY,
