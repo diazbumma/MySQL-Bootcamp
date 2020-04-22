@@ -1,3 +1,11 @@
+--change timestamp using ON UPDATE
+CREATE TABLE caption (
+  caption_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  content VARCHAR(255),
+  username VARCHAR(255),
+  updated_at TIMESTAMP DEFAULT NOW() ON UPDATE NOW()
+);
+
 -- Case statements (like if-else statements in programming language)
 SELECT title, released_year,
   CASE
