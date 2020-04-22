@@ -191,3 +191,54 @@ SELECT
 FROM students LEFT JOIN papers ON students.id = papers.student_id
 GROUP BY students.id
 ORDER BY average DESC;
+
+/* Many to many challenges */
+SELECT title, rating FROM series INNER JOIN reviews ON series.id = reviews.series_id;
+
+SELECT title, AVG(rating) AS avg_rating FROM series INNER JOIN reviews
+  ON series.id = reviews.series_id
+  GROUP BY series.id
+  ORDER BY avg_rating;
+
+SELECT first_name, last_name, rating FROM reviewers INNER JOIN reviews ON reviewers.id = reviews.reviewer_id;
+
+SELECT title AS unreviewed_series FROM series LEFT JOIN reviews ON series.id = reviews.series_id
+WHERE rating IS NULL;
+
+SELECT genre, AVG(rating) AS avg_rating FROM series INNER JOIN reviews ON series.id = reviews.series_id
+GROUP BY genre;
+
+SELECT
+  first_name,
+  last_name,
+  COUNT(rating) AS COUNT,
+  IFNULL(ROUND(MIN(rating), 1), 0) AS MIN,
+  IFNULL(ROUND(MAX(rating), 1), 0) AS MAX,
+  IFNULL(AVG(rating), 0) AS AVG,
+  -- IF(COUNT(rating) = 0, 'INACTIVE', 'ACTIVE') AS STATUS
+  CASE
+    WHEN COUNT(rating) = 0 THEN 'INACTIVE'
+    ELSE 'ACTIVE'
+  END AS STATUS
+FROM reviewers LEFT JOIN reviews ON reviewers.id = reviews.reviewer_id
+GROUP BY reviewers.id;
+
+SELECT title, rating, reviewer FROM series INNER JOIN (
+  (SELECT
+    series_id,
+    rating,
+    CONCAT(first_name, ' ', last_name) AS reviewer
+    FROM reviews INNER JOIN reviewers ON reviews.reviewer_id = reviewers.id) AS ratings
+) ON series.id = ratings.series_id
+ORDER BY title;
+
+SELECT
+  title,
+  rating,
+  CONCAT(first_name, ' ', last_name) AS reviewer
+FROM series
+INNER JOIN reviews
+  ON series.id = reviews.series_id
+INNER JOIN reviewers
+  ON reviews.reviewer_id = reviewers.id
+ORDER BY title;
