@@ -78,3 +78,7 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+-- Managing triggers
+SHOW TRIGGERS;
+DROP TRIGGER create_unfollow;
