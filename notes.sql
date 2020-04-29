@@ -50,3 +50,31 @@ CREATE TABLE photo_tags (
   FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE,
   PRIMARY KEY (photo_id, tag_id)                      --make sure combinations of two id won't be repeated
 );
+
+-- Database triggers
+DELIMITER $$
+
+CREATE TRIGGER prevent_self_follows
+    BEFORE INSERT ON follows FOR EACH ROW                   --Trigger executed before query
+    BEGIN
+        IF NEW.follower_id = NEW.followee_id
+        THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'Cannot follow yourself'
+        END IF;
+    END;
+$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER create_unfollow
+    AFTER DELETE ON follows FOR EACH ROW                    --Trigger executed after query
+BEGIN
+    INSERT INTO unfollows
+    SET follower_id = OLD.follower_id,
+        followee_id = OLD.followee_id;
+END$$
+
+DELIMITER ;
